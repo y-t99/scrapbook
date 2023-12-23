@@ -1,0 +1,309 @@
+@font-face {
+    font-family: 'scrapbook_editor';
+    src: url('fonts/scrapbook_editor.eot');
+    src: url('fonts/scrapbook_editor.eot#iefix') format('embedded-opentype'),
+    url('fonts/scrapbook_editor.woff2') format('woff'),
+    url('fonts/scrapbook_editor.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'scrapbook_svg';
+    src: url('fonts/svg/scrapbook_svg.eot');
+    src: url('fonts/svg/scrapbook_svg.eot#iefix') format('embedded-opentype'),
+    url('fonts/svg/scrapbook_svg.woff') format('woff'),
+    url('fonts/svg/scrapbook_svg.ttf') format('truetype'),
+    url('fonts/svg/scrapbook_svg.svg#scrapbook_editor') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="se_icon-"]:before, [class*="se_icon-"]:before {
+    font-family: 'scrapbook_svg';
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1em;
+    margin-right: .2em;
+    text-align: center;
+    font-variant: normal;
+    text-transform: none;
+
+    line-height: 1em;
+
+    /* Animation center compensation - margins should be symmetric */
+    margin-left: .2em;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.se_icon-instagram:before {
+    content: '\e800';
+}
+
+/* '' */
+.se_icon-minus:before {
+    content: '\e801';
+}
+
+/* '' */
+.se_icon-picture:before {
+    content: '\e802';
+}
+
+/* '' */
+.se_icon-minus-circled:before {
+    content: '\e803';
+}
+
+/* '' */
+.se_icon-cog:before {
+    content: '\e804';
+}
+
+/* '' */
+.se_icon-link:before {
+    content: '\e805';
+}
+
+/* '' */
+.se_icon-unlink:before {
+    content: '\e806';
+}
+
+/* '' */
+.se_icon-code:before {
+    content: '\e807';
+}
+
+/* '' */
+.se_icon-quote-right:before {
+    content: '\e808';
+}
+
+/* '' */
+.se_icon-comment:before {
+    content: '\e809';
+}
+
+/* '' */
+.se_icon-trash-empty:before {
+    content: '\e80a';
+}
+
+/* '' */
+.se_icon-down-open:before {
+    content: '\e80b';
+}
+
+/* '' */
+.se_icon-up-open:before {
+    content: '\e80c';
+}
+
+/* '' */
+.se_icon-up-big:before {
+    content: '\e80d';
+}
+
+/* '' */
+.se_icon-down-big:before {
+    content: '\e80e';
+}
+
+/* '' */
+.se_icon-header:before {
+    content: '\e80f';
+}
+
+/* '' */
+.se_icon-align-center:before {
+    content: '\e810';
+}
+
+/* '' */
+.se_icon-align-left:before {
+    content: '\e811';
+}
+
+/* '' */
+.se_icon-align-right:before {
+    content: '\e812';
+}
+
+/* '' */
+.se_icon-list:before {
+    content: '\e813';
+}
+
+/* '' */
+.se_icon-strike:before {
+    content: '\e814';
+}
+
+/* '' */
+.se_icon-underline:before {
+    content: '\e815';
+}
+
+/* '' */
+.se_icon-table:before {
+    content: '\e816';
+}
+
+/* '' */
+.se_icon-columns:before {
+    content: '\e817';
+}
+
+/* '' */
+.se_icon-bold:before {
+    content: '\e818';
+}
+
+/* '' */
+.se_icon-italic:before {
+    content: '\e819';
+}
+
+/* '' */
+.se_icon-smile:before {
+    content: '\e81a';
+}
+
+/* '' */
+.se_icon-twitter:before {
+    content: '\e81b';
+}
+
+/* '' */
+.se_icon-plus-1:before {
+    content: '\e81c';
+}
+
+.se_icon-plus-circled-1:before {
+    content: '\e81d';
+}
+
+/* '' */
+.se_icon-quote:before {
+    content: '\e81e';
+}
+
+/* '' */
+.se_icon-code-1:before {
+    content: '\e81f';
+}
+
+/* '' */
+.se_icon-trash:before {
+    content: '\e820';
+}
+
+/* '' */
+.se_icon-list-add:before {
+    content: '\e821';
+}
+
+/* '' */
+.se_icon-list-1:before {
+    content: '\e822';
+}
+
+/* '' */
+
+
+/* EDITOR */
+.hidden {
+    display: none !important;
+}
+
+.hidden_file {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+    left: -99999px;
+}
+
+.scrapbook_editor button {
+    border: 0;
+    outline: none;
+    background: transparent;
+}
+
+.scrapbook_editor [contenteditable] {
+    outline: none;
+}
+
+.scrapbook_editor .node {
+    position: relative;
+    z-index: 5;
+}
+
+.scrapbook_editor .add_buttons {
+    color: #3b4352;
+    font-size: 16px;
+    margin-left: -42px;
+    margin-top: -50px;
+    margin-bottom: -25px;
+    position: relative;
+}
+
+.add_buttons .buttons {
+    position: absolute;
+    top: 3px;
+}
+
+.scrapbook_editor .add_buttons button:hover,
+.scrapbook_editor .add_buttons .focused {
+    color: #3770ef;
+}
+
+.scrapbook_editor .add_buttons button {
+    transition: all 150ms ease-in;
+    transform: translate3d(-50px, 0, 0);
+    opacity: 0;
+    font-size: 14px;
+    /*display: none;*/
+}
+
+.scrapbook_editor .buttons_toggled {
+    background: #fff;
+    z-index: 10;
+}
+
+.scrapbook_editor .buttons_toggled button {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+
+.scrapbook_editor .toggler {
+    /* position: relative; */
+    /* left: -42px; */
+    display: inline-block;
+    font-size: 23px;
+    color: #387ff5;
+    transition: transform 100ms ease-in;
+}
+
+
+.scrapbook_editor .toggler .buttons {
+    position: relative;
+    top: -2px;
+}
+.scrapbook_editor .buttons_toggled .toggler{
+    transform: rotate(45deg);
+}
+
+/** Typography styles */
+.scrapbook_editor p {
+    margin: 30px 0;
+    font-size: 17px;
+}
+
