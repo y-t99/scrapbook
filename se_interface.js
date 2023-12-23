@@ -62,16 +62,6 @@ se.prototype.makeInterface = function () {
 
     this.toolbarButtons = this.make.toolbarButtons(this.allTools, this.settings.tools);
 
-    for (var i = 0; i < this.allTools.length; i++) {
-        tool = this.allTools[i];
-
-        if (this.settings.tools.indexOf(tool) < 0)
-            continue;
-
-        button = this.make.toolbarButton(tool);
-        this.toolbarButtons.appendChild(button);
-    }
-
     /** Add first node and tool bar*/
     wrapper.appendChild(firstNode);
     wrapper.appendChild(toolbar);
@@ -173,7 +163,7 @@ se.prototype.enterKeyPressed = function(event) {
         this.wrapper.insertBefore(toolbar, newNode);
 
         /** Set auto focus */
-        var contentEditable = newNode.getElementsByClassName('ce_node_content');
+        var contentEditable = newNode.getElementsByClassName('se_node_content');
         contentEditable.length && contentEditable[0].focus();
     }
 
