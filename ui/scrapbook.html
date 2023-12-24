@@ -14,25 +14,31 @@
 
 <body style="padding: 100px">
 
-<h1>Scrapbook Editor</h1>
+<h1>Scrapbook</h1>
 
 <form action="">
 
-    <textarea name="" id="scrapbook_page" cols="30" rows="10"></textarea>
+    <div id="scrapbook_page"></div>
 
 </form>
 
 </body>
 </html>
 
-<script src="se_interface.js"></script>
+<script src="lib/checklist.umd.js"></script>
+<script src="lib/editorjs.umd.js"></script>
 <script>
 
-    function ready(f){/in/.test(document.readyState) ? setTimeout(ready,9,f) : f();}
+    var editor = new EditorJS({
+        holder: 'scrapbook_page',
 
-    /** Document is ready */
-    ready(function() {
-        window.sEditor = new se('scrapbook_page', { tools : ['header', 'picture']});
-    })
+        tools: {
+            checklist: {
+                class: Checklist,
+                inlineToolbar : true
+            }
+        }
+    });
+
 
 </script>

@@ -1,0 +1,17 @@
+@font-face {
+    font-family: 'scrapbook_editor';
+    src: url('ui/fontsbook_editor.eot');
+    src: url('ui/fontsbook_editor.eot#iefix') format('embedded-opentype'),
+    url('ui/fontsbook_editor.woff2') format('woff'),
+    url('ui/fontsbook_editor.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.ce-block__content, .ce-toolbar__content {
+    max-width: calc(100% - 80px) !important;
+}
+
+.cdx-block {
+    max-width: 100% !important;
+}
