@@ -1,9 +1,9 @@
 @font-face {
     font-family: 'scrapbook_editor';
-    src: url('ui/fontsbook_editor.eot');
-    src: url('ui/fontsbook_editor.eot#iefix') format('embedded-opentype'),
-    url('ui/fontsbook_editor.woff2') format('woff'),
-    url('ui/fontsbook_editor.ttf') format('truetype');
+    src: url('fonts/scrapbook_editor.eot');
+    src: url('fonts/scrapbook_editor.eot#iefix') format('embedded-opentype'),
+    url('fonts/scrapbook_editor.woff2') format('woff'),
+    url('fonts/scrapbook_editor.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
