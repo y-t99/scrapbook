@@ -35,7 +35,45 @@
         tools: {
             checklist: {
                 class: Checklist,
-                inlineToolbar : true
+                inlineToolbar: true
+            }
+        },
+
+        onChange: async (api, event) => {
+            console.log(api);
+            const tauri = window.__TAURI__;
+            if (typeof tauri !== "undefined") {
+                const invoke = tauri.invoke;
+                const events = [];
+                if (Array.isArray(event)) {
+                    for (let i = 0; i < event.length; i++) {
+                        const block = api.blocks.getById(event[i].detail.target.id);
+                        const savedData = await block.save();
+                        events.push({
+                            type: event[i].type,
+                            block: {
+                                id: event[i].detail.target.id,
+                                type: event[i].detail.target.name,
+                                data: savedData && savedData.data,
+                            }
+                        });
+                    }
+                } else {
+                    const block = api.blocks.getById(event.detail.target.id);
+                    const savedData = await block.save();
+                    console.log(savedData);
+                    events.push({
+                        type: event.type,
+                        block: {
+                            id: event.detail.target.id,
+                            type: event.detail.target.name,
+                            data: savedData && savedData.data,
+                        }
+                    });
+                }
+                invoke('document_change', {
+                    event: JSON.stringify(events, null, 2)
+                });
             }
         }
     });
