@@ -40,40 +40,30 @@
         },
 
         onChange: async (api, event) => {
-            console.log(api);
             const tauri = window.__TAURI__;
+            const transformEventModel = async (e) => {
+                const block = api.blocks.getById(e.detail.target.id);
+                const savedData = await block.save();
+                return {
+                    type: e.type,
+                    block: {
+                        id: e.detail.target.id,
+                        type: e.detail.target.name,
+                        data: savedData && savedData.data,
+                    }
+                }
+            };
             if (typeof tauri !== "undefined") {
                 const invoke = tauri.invoke;
                 const events = [];
                 if (Array.isArray(event)) {
                     for (let i = 0; i < event.length; i++) {
-                        const block = api.blocks.getById(event[i].detail.target.id);
-                        const savedData = await block.save();
-                        events.push({
-                            type: event[i].type,
-                            block: {
-                                id: event[i].detail.target.id,
-                                type: event[i].detail.target.name,
-                                data: savedData && savedData.data,
-                            }
-                        });
+                        events.push(await transformEventModel(event[i]));
                     }
                 } else {
-                    const block = api.blocks.getById(event.detail.target.id);
-                    const savedData = await block.save();
-                    console.log(savedData);
-                    events.push({
-                        type: event.type,
-                        block: {
-                            id: event.detail.target.id,
-                            type: event.detail.target.name,
-                            data: savedData && savedData.data,
-                        }
-                    });
+                    events.push(await transformEventModel(event));
                 }
-                invoke('document_change', {
-                    event: JSON.stringify(events, null, 2)
-                });
+                invoke('document_change', {events: events});
             }
         }
     });
