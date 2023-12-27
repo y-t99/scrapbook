@@ -1,6 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::fs::File;
 use bson::Document;
 
 fn main() {
@@ -12,7 +13,9 @@ fn main() {
 
 #[tauri::command]
 fn document_change(events: Vec<Document>) {
-    events.iter().for_each(|event| {
+    let buffer = File::options().append(true).create(true).open("./../log.bson").expect("Log Open Error.");
+    for event in events.iter() {
+        event.to_writer(&buffer).expect("Log Append Error.");
         println!("{}", event);
-    });
+    }
 }

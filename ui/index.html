@@ -29,7 +29,26 @@
 <script src="lib/editorjs.umd.js"></script>
 <script>
 
-    var editor = new EditorJS({
+    const transformEventModel = async (api, e) => {
+        let savedData = { data: {} };
+        if (e.type !== 'block-removed') {
+            const block = api.blocks.getById(e.detail.target.id);
+            savedData = await block.save();
+        }
+        return {
+            type: e.type,
+            index: e.detail.index,
+            fromIndex: e.detail.fromIndex,
+            toIndex: e.detail.toIndex,
+            block: {
+                id: e.detail.target.id,
+                type: e.detail.target.name,
+                data: savedData && savedData.data,
+            }
+        }
+    };
+
+    const editor = new EditorJS({
         holder: 'scrapbook_page',
 
         tools: {
@@ -41,32 +60,19 @@
 
         onChange: async (api, event) => {
             const tauri = window.__TAURI__;
-            const transformEventModel = async (e) => {
-                const block = api.blocks.getById(e.detail.target.id);
-                const savedData = await block.save();
-                return {
-                    type: e.type,
-                    block: {
-                        id: e.detail.target.id,
-                        type: e.detail.target.name,
-                        data: savedData && savedData.data,
-                    }
-                }
-            };
             if (typeof tauri !== "undefined") {
                 const invoke = tauri.invoke;
                 const events = [];
                 if (Array.isArray(event)) {
                     for (let i = 0; i < event.length; i++) {
-                        events.push(await transformEventModel(event[i]));
+                        events.push(await transformEventModel(api, event[i]));
                     }
                 } else {
-                    events.push(await transformEventModel(event));
+                    events.push(await transformEventModel(api, event));
                 }
                 invoke('document_change', {events: events});
             }
         }
     });
-
 
 </script>
