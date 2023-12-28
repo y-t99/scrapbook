@@ -29,6 +29,8 @@
 <script src="lib/editorjs.umd.js"></script>
 <script>
 
+    const tauri = window.__TAURI__;
+
     const transformEventModel = async (api, e) => {
         let savedData = { data: {} };
         if (e.type !== 'block-removed') {
@@ -59,7 +61,6 @@
         },
 
         onChange: async (api, event) => {
-            const tauri = window.__TAURI__;
             if (typeof tauri !== "undefined") {
                 const invoke = tauri.invoke;
                 const events = [];
