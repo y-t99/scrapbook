@@ -5,15 +5,20 @@ use std::fs::File;
 use std::io::Seek;
 use bson::Document;
 
+struct SState(Vec<u64>);
+
 fn main() {
+    let hash: Vec<u64> = Vec::new();
+    let context = tauri::generate_context!();
     tauri::Builder::default()
+        .manage(SState(hash))
         .invoke_handler(tauri::generate_handler![document_change, history])
-        .run(tauri::generate_context!())
+        .run(context)
         .expect("error while running tauri application");
 }
 
 #[tauri::command]
-fn document_change(events: Vec<Document>) {
+fn document_change(_state: tauri::State<SState>, events: Vec<Document>) {
     let buffer = File::options().append(true).create(true).open("./../log.bson").expect("Log Open Error.");
     for event in events.iter() {
         event.to_writer(&buffer).expect("Log Append Error.");
