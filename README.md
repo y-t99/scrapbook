@@ -19,3 +19,38 @@ Run app:
 ```shell
 tauri dev
 ```
+
+### Editor Block Event
+
+```text
+model BlockAddedEvent {
+  type: 'block-added';
+  index: number;
+}
+
+model BlockRemovedEvent {
+  type: 'block-removed';
+  index: number;
+}
+
+model BlockMovedEvent {
+  type: 'block-moved';
+  fromIndex: number;
+  toIndex: number;
+}
+
+model BlockChangedEvent {
+  type: 'block-removed';
+  index: number;
+}
+```
+
+### Editor Block Data
+
+```text
+model BlockData<T> {
+    id: string;
+    type: string;
+    data: T;
+}
+```
