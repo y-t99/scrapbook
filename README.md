@@ -35,8 +35,8 @@ model BlockRemovedEvent {
 
 model BlockMovedEvent {
   action_type: 'block-moved';
-  fromIndex: number;
-  toIndex: number;
+  from_index: number;
+  to_index: number;
 }
 
 model BlockChangedEvent {
