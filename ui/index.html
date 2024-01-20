@@ -38,13 +38,13 @@
             savedData = await block.save();
         }
         return {
-            type: e.type,
+            action_type: e.type,
             index: e.detail.index,
             fromIndex: e.detail.fromIndex,
             toIndex: e.detail.toIndex,
             block: {
                 id: savedData.id,
-                type: savedData.tool,
+                tool: savedData.tool,
                 data: savedData && savedData.data
             }
         }

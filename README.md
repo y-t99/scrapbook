@@ -24,23 +24,23 @@ tauri dev
 
 ```text
 model BlockAddedEvent {
-  type: 'block-added';
+  action_type: 'block-added';
   index: number;
 }
 
 model BlockRemovedEvent {
-  type: 'block-removed';
+  action_type: 'block-removed';
   index: number;
 }
 
 model BlockMovedEvent {
-  type: 'block-moved';
+  action_type: 'block-moved';
   fromIndex: number;
   toIndex: number;
 }
 
 model BlockChangedEvent {
-  type: 'block-removed';
+  action_type: 'block-changed';
   index: number;
 }
 ```
@@ -50,7 +50,7 @@ model BlockChangedEvent {
 ```text
 model BlockData<T> {
     id: string;
-    type: string;
+    tool: string;
     data: T;
 }
 ```
