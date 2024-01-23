@@ -60,6 +60,23 @@
             }
         },
 
+        onReady: async () => {
+            if (typeof tauri !== "undefined") {
+                const invoke = tauri.invoke;
+                invoke('document_change', {events: [
+                    {
+                        action_type: 'block-added',
+                        index: 0,
+                        block: {
+                            id: "_",
+                            type: "paragraph",
+                            data: { text: "HELLO SCRAPBOOK!" }
+                        }
+                    }
+                ]});
+            }
+        },
+
         onChange: async (api, event) => {
             if (typeof tauri !== "undefined") {
                 const invoke = tauri.invoke;
@@ -78,7 +95,7 @@
         data: {
             blocks: [
                 {
-                    id: "al57AJRbHN",
+                    id: "_",
                     type: "paragraph",
                     data: { text: "HELLO SCRAPBOOK!" }
                 }
