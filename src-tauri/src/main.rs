@@ -1,13 +1,13 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use bson::Document;
 use std::convert::TryInto;
 use std::fmt;
 use std::fs::File;
-use std::io::Seek;
+use std::io::{Read, Seek, Write};
 use std::mem::replace;
 use std::sync::Mutex;
-use bson::Document;
 use tauri::State;
 
 // https://stackoverflow.com/questions/33759072/why-doesnt-vect-implement-the-display-trait
@@ -29,14 +29,14 @@ impl<'a, T: fmt::Display + 'a> fmt::Display for SliceDisplay<'a, T> {
 }
 
 struct Indexes {
-    table: Mutex<Vec<u64>>
+    table: Mutex<Vec<u64>>,
 }
 
 fn main() {
     let context = tauri::generate_context!();
     tauri::Builder::default()
         .manage(Indexes {
-            table: Mutex::new(Vec::new())
+            table: Mutex::new(Vec::new()),
         })
         .invoke_handler(tauri::generate_handler![document_change, history])
         .run(context)
@@ -49,33 +49,113 @@ fn document_change(indexes: State<Indexes>, events: Vec<Document>) {
     if table.capacity() < 1 {
         table.reserve(256);
     }
-    let mut buffer = File::options().append(true).create(true).open("./../log.bson").expect("Log Open Error.");
+    // list action: 0 - remove 1 - insert 2 - replace
+    const LIST_REMOVE_ACTION: [u8; 1] = [0];
+    const LIST_INSERT_ACTION: [u8; 1] = [1];
+    const LIST_REPLACE_ACTION: [u8; 1] = [2];
+    let mut index_log = File::options()
+        .append(true)
+        .create(true)
+        .open("./../index-log.data")
+        .expect("Log Open Error.");
+    let mut data_log = File::options()
+        .append(true)
+        .create(true)
+        .open("./../log.bson")
+        .expect("Log Open Error.");
     for event in events.iter() {
-        println!("{}", event);
-        let start_point = buffer.metadata().unwrap().len();
-        let action_type = event.get("action_type").unwrap().as_str().expect("Type Transformed Error.");
+        let start_point = data_log.metadata().unwrap().len();
+        let action_type = event
+            .get("action_type")
+            .unwrap()
+            .as_str()
+            .expect("Type Transformed Error.");
         match action_type {
             "block-added" => {
-                let index: usize = event.get("index").unwrap().as_i32().unwrap().try_into().unwrap();
+                let index: usize = event
+                    .get("index")
+                    .unwrap()
+                    .as_i32()
+                    .unwrap()
+                    .try_into()
+                    .unwrap();
                 table.insert(index, start_point);
-            },
+                index_log
+                    .write(&LIST_INSERT_ACTION)
+                    .expect("Log Write Error.");
+                let index_position = (index as u64).to_be_bytes();
+                index_log.write(&index_position).expect("Log Write Error.");
+                index_log
+                    .write(&start_point.to_be_bytes())
+                    .expect("Log Write Error.");
+            }
             "block-removed" => {
-                let index: usize = event.get("index").unwrap().as_i64().unwrap().try_into().unwrap();
+                let index: usize = event
+                    .get("index")
+                    .unwrap()
+                    .as_i32()
+                    .unwrap()
+                    .try_into()
+                    .unwrap();
                 table.remove(index);
-            },
+                index_log
+                    .write(&LIST_REMOVE_ACTION)
+                    .expect("Log Write Error.");
+                let index_position = (index as u64).to_be_bytes();
+                index_log.write(&index_position).expect("Log Write Error.");
+            }
             "block-moved" => {
-                let from_index: usize = event.get("fromIndex").unwrap().as_i64().unwrap().try_into().unwrap();
-                let to_index: usize = event.get("toIndex").unwrap().as_i64().unwrap().try_into().unwrap();
+                let from_index: usize = event
+                    .get("from_index")
+                    .unwrap()
+                    .as_i32()
+                    .unwrap()
+                    .try_into()
+                    .unwrap();
+                let to_index: usize = event
+                    .get("to_index")
+                    .unwrap()
+                    .as_i32()
+                    .unwrap()
+                    .try_into()
+                    .unwrap();
                 let position = table.remove(from_index);
+                index_log
+                    .write(&LIST_REMOVE_ACTION)
+                    .expect("Log Write Error.");
+                let index_position = (from_index as u64).to_be_bytes();
+                index_log.write(&index_position).expect("Log Write Error.");
                 table.insert(to_index, position);
-            },
+                index_log
+                    .write(&LIST_INSERT_ACTION)
+                    .expect("Log Write Error.");
+                let index_position = (to_index as u64).to_be_bytes();
+                index_log.write(&index_position).expect("Log Write Error.");
+                index_log
+                    .write(&position.to_be_bytes())
+                    .expect("Log Write Error.");
+            }
             "block-changed" => {
-                let index: usize = event.get("index").unwrap().as_i32().unwrap().try_into().unwrap();
+                let index: usize = event
+                    .get("index")
+                    .unwrap()
+                    .as_i32()
+                    .unwrap()
+                    .try_into()
+                    .unwrap();
                 let _ = replace(&mut table[index], start_point);
-            },
-            _ => panic!("Action Error.") }
-        event.to_writer(&buffer).expect("Log Append Error.");
-        println!("{}", SliceDisplay(& table));
+                index_log
+                    .write(&LIST_REPLACE_ACTION)
+                    .expect("Log Write Error.");
+                let index_position = (index as u64).to_be_bytes();
+                index_log.write(&index_position).expect("Log Write Error.");
+                index_log
+                    .write(&start_point.to_be_bytes())
+                    .expect("Log Write Error.");
+            }
+            _ => panic!("Action Error."),
+        }
+        event.to_writer(&data_log).expect("Log Append Error.");
     }
 }
 
