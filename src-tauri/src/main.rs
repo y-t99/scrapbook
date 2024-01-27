@@ -5,7 +5,7 @@ use bson::Document;
 use std::convert::TryInto;
 use std::fmt;
 use std::fs::File;
-use std::io::{Read, Seek, Write};
+use std::io::{ErrorKind, Read, Seek, SeekFrom, Write};
 use std::mem::replace;
 use std::sync::Mutex;
 use tauri::State;
@@ -160,12 +160,61 @@ fn document_change(indexes: State<Indexes>, events: Vec<Document>) {
 }
 
 #[tauri::command]
-fn history() -> Vec<Document> {
-    let buffer = File::options().read(true).open("./../log.bson").expect("Log Open Error.");
-    let meta = buffer.metadata().expect("Get Metadata Error.");
-    let len = meta.len();
+fn history(indexes: State<Indexes>) -> Vec<Document> {
+    // Read index log to generate index;
+    let mut table = indexes.table.lock().unwrap();
+    let mut index_log = match File::options().read(true).open("./../index-log.data") {
+        Ok(file) => file,
+        Err(error) => match error.kind() {
+            ErrorKind::NotFound => {
+                File::create("./../index-log.data").expect("Log Create Error.");
+                File::create("./../log.bson").expect("Log Create Error.");
+                File::options().read(true).open("./../index-log.data").expect("Log Open Error.")
+            }
+            other_error => {
+                panic!("Problem opening the file: {:?}", other_error);
+            }
+        },
+    };
+    let index_log_meta = index_log.metadata().expect("Get Metadata Error.");
+    let index_log_len = index_log_meta.len();
+    let mut list_action_buffer: [u8; 1] = [0; 1];
+    let mut u64_buffer: [u8; 8] = [0; 8];
+    while (&index_log).stream_position().expect("Get Seek Error.") < index_log_len {
+        index_log.read(&mut list_action_buffer).expect("Index Read Error.");
+        let list_action = u8::from_be_bytes(list_action_buffer.clone());
+        match list_action {
+            0 => {
+                index_log.read(&mut u64_buffer).expect("Index Read Error.");
+                let index = u64::from_be_bytes(u64_buffer.clone());
+                table.remove(index.try_into().unwrap());
+            },
+            1 => {
+                index_log.read(&mut u64_buffer).expect("Index Read Error.");
+                let index = u64::from_be_bytes(u64_buffer.clone());
+                index_log.read(&mut u64_buffer).expect("Index Read Error.");
+                let value = u64::from_be_bytes(u64_buffer.clone());
+                table.insert(index.try_into().unwrap(), value);
+            },
+            2 => {
+                index_log.read(&mut u64_buffer).expect("Index Read Error.");
+                let index: usize = u64::from_be_bytes(u64_buffer.clone()).try_into().unwrap();
+                index_log.read(&mut u64_buffer).expect("Index Read Error.");
+                let value = u64::from_be_bytes(u64_buffer.clone());
+                let _ = replace(&mut table[index], value);
+            },
+            _ => {
+                panic!("Index Log Error.");
+            }
+        }
+    }
+    let mut buffer = File::options()
+        .read(true)
+        .open("./../log.bson")
+        .expect("Log Open Error.");
     let mut history: Vec<Document> = Vec::new();
-    while (&buffer).stream_position().expect("Get Seek Error.") < len {
+    for index in table.iter() {
+        buffer.seek(SeekFrom::Start(index.clone())).expect("Document Seek Error.");
         let document = Document::from_reader(&buffer).expect("Document Read Error.");
         history.push(document);
     }
