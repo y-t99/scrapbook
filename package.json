@@ -1,0 +1,26 @@
+{
+  "name": "scrapbook",
+  "version": "0.1.0",
+  "description": "Scrapbook helps to record fragmented information.",
+  "private": true,
+  "scripts": {
+    "clean": "rimraf dist",
+    "copy-index": "copyfiles -f src-ui/index.html dist",
+    "build": "npm run copy-index && webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "copyfiles": "^2.4.1",
+    "rimraf": "^5.0.5",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.1",
+    "css-loader": "^6.9.1",
+    "style-loader": "^3.3.4"
+  },
+  "dependencies": {
+    "@editorjs/checklist": "^1.6.0",
+    "@editorjs/editorjs": "^2.29.0"
+  }
+}

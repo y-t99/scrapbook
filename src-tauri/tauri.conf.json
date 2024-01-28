@@ -1,7 +1,9 @@
 {
   "build": {
-    "devPath": "../ui",
-    "distDir": "../ui",
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run build",
+    "devPath": "../dist",
+    "distDir": "../dist",
     "withGlobalTauri": true
   },
   "package": {
