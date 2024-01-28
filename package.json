@@ -6,7 +6,8 @@
   "scripts": {
     "clean": "rimraf dist",
     "copy-index": "copyfiles -f src-ui/index.html dist",
-    "build": "npm run copy-index && webpack"
+    "build": "npm run copy-index && webpack --mode=development",
+    "re:build": "npm run clean && npm run copy-index && webpack --mode=development"
   },
   "keywords": [],
   "author": "",

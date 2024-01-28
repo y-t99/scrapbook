@@ -21,4 +21,9 @@ module.exports = {
             },
         ],
     },
+    performance: {
+        assetFilter: function (assetFilename) {
+            return !/\.(woff|woff2|eot|ttf|otf)$/.test(assetFilename);
+        },
+    },
 };
