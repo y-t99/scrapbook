@@ -9,7 +9,7 @@ const Sidebar = () => {
   useEffect(() => {
     if (!collection || !editor) return;
     const updateDocs = () => {
-      setDocs([...collection.docs.values()] as any);
+      setDocs([...collection.docs.values()]);
     };
     updateDocs();
 
@@ -31,7 +31,7 @@ const Sidebar = () => {
             key={doc.id}
             onClick={() => {
               if (editor) editor.doc = doc;
-              setDocs([...collection!.docs.values()] as any);
+              setDocs([...collection!.docs.values()]);
             }}
           >
             {doc.meta?.title || 'Untitled'}

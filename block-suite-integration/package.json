@@ -5,11 +5,14 @@
   "author": "itou ng",
   "license": "MIT",
   "dependencies": {
-    "@blocksuite/blocks": "^0.14.0-canary-202404301111-1929626",
-    "@blocksuite/presets": "^0.14.0-canary-202404301111-1929626",
-    "@blocksuite/store": "^0.14.0-canary-202404301111-1929626",
+    "@blocksuite/block-std": "^0.13.0",
+    "@blocksuite/blocks": "^0.13.0",
+    "@blocksuite/inline": "^0.13.0",
+    "@blocksuite/presets": "^0.13.0",
+    "@blocksuite/store": "^0.13.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "yjs": "^13.6.15"
   },
   "devDependencies": {
     "@types/react": "^18.3.1",
