@@ -7,6 +7,8 @@
         "moduleResolution": "bundler",
         "jsx": "react-jsx",
         "allowJs": true,
-        "downlevelIteration": true
-    }
+        "downlevelIteration": true,
+    },
+    "include": ["./src-ui/**/*"],
+    "exclude": ["node_modules"]
 }
