@@ -9,7 +9,7 @@
 
 ### Persistence
 
-The application persist data by write-ahead log (WAL). The the on-disk log file format is BSON.
+The application persist data by write-ahead log (WAL). The on-disk log file format is BSON.
 
 ### Compaction
 
