@@ -5,9 +5,13 @@
 1. [BSON](https://bsonspec.org/)
 2. [bitcask](https://github.com/basho/bitcask)
 
-## 
+## Feature
 
-### Compaction & Merge
+### Persistence
+
+The application persist data by write-ahead log (WAL). The the on-disk log file format is BSON.
+
+### Compaction
 
 1. [SQLite - VACUUM](https://www.sqlite.org/lang_vacuum.html)
 2. [Wiredtiger - Compaction](https://source.wiredtiger.com/develop/arch-compact.html)
