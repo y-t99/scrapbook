@@ -60,7 +60,7 @@ function App() {
   }
 
   const onReady = async () => {
-    if (is_first) {
+    if (is_first && typeof tauri !== 'undefined') {
       invoke('document_change', {
         events: [
           {
