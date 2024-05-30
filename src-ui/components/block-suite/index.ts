@@ -1,1 +1,1 @@
-export * from './ReactHost';
+export * from './view/ReactHost';

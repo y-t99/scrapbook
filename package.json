@@ -31,16 +31,19 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@blocksuite/block-std": "^0.13.0",
-    "@blocksuite/blocks": "^0.13.0",
-    "@blocksuite/inline": "^0.13.0",
-    "@blocksuite/store": "^0.13.0",
+    "@blocksuite/block-std": "^0.14.0",
+    "@blocksuite/blocks": "^0.14.0",
+    "@blocksuite/inline": "^0.14.0",
+    "@blocksuite/store": "^0.14.0",
     "@editorjs/checklist": "^1.6.0",
     "@editorjs/editorjs": "^2.29.0",
+    "@lit/react": "^1.0.5",
     "@tauri-apps/api": "^1.5.4",
+    "@toeverything/theme": "^0.7.30",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "zod": "^3.23.8"
   }
 }
