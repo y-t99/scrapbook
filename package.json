@@ -8,12 +8,14 @@
     "format": "eslint",
     "copy-index": "copyfiles -f src-ui/index.html dist",
     "build": "npm run copy-index && webpack --mode=development",
-    "re:build": "npm run clean && npm run copy-index && webpack --mode=development"
+    "re:build": "npm run clean && npm run copy-index && webpack --mode=development",
+    "dev": "npm run re:build && tauri dev"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@tauri-apps/cli": "^1.6.0",
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
     "copyfiles": "^2.4.1",
@@ -33,9 +35,11 @@
   "dependencies": {
     "@editorjs/checklist": "^1.6.0",
     "@editorjs/editorjs": "^2.29.0",
+    "@lexical/react": "^0.17.0",
     "@tauri-apps/api": "^1.5.4",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
+    "lexical": "^0.17.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "zod": "^3.23.8"
